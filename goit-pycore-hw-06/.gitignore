@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.python-version
+
+# Віртуальні середовища (якщо захочете створити пізніше)
+venv/
+.venv/
+env/
+
+# Системні файли та налаштування IDE
+.vscode/
+.idea/
+.DS_Store
