@@ -1,0 +1,31 @@
+{
+  "notifications": {
+    "enabled": true,
+    "days_in_advance": 7,
+    "check_interval": "1h",
+    "show_on_startup": true
+  },
+  "ui": {
+    "theme": "dark",
+    "tab_order": [
+      "Contacts",
+      "Notes",
+      "Settings"
+    ],
+    "auto_save_interval": 30
+  },
+  "colors": {
+    "default_palette": [
+      "#FF6B6B",
+      "#4ECDC4",
+      "#45B7D1",
+      "#FFA07A",
+      "#98D8C8",
+      "#F7DC6F",
+      "#BB8FCE",
+      "#85C1E2",
+      "#F8B88B",
+      "#A8E6CF"
+    ]
+  }
+}

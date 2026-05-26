@@ -1,0 +1,55 @@
+{
+  "test 1": {
+    "name": "test 1",
+    "phone": "123-123-123",
+    "phone2": null,
+    "email": null,
+    "email2": null,
+    "address": "111",
+    "birthday": "11.11.1111",
+    "notes": [],
+    "tags": [],
+    "color": "#BB8FCE"
+  },
+  "test2": {
+    "name": "test2",
+    "phone": "222-222-222",
+    "phone2": null,
+    "email": null,
+    "email2": null,
+    "address": null,
+    "birthday": null,
+    "notes": [],
+    "tags": [],
+    "color": "#FF6B6B"
+  },
+  "teste3": {
+    "name": "teste3",
+    "phone": null,
+    "phone2": null,
+    "email": null,
+    "email2": null,
+    "address": null,
+    "birthday": null,
+    "notes": [],
+    "tags": [],
+    "color": "#A8E6CF"
+  },
+  "testt4": {
+    "name": "testt4",
+    "phone": "222-333--4444",
+    "phone2": "2222-33-111",
+    "email": null,
+    "email2": null,
+    "address": null,
+    "birthday": null,
+    "notes": [
+      "test account #4"
+    ],
+    "tags": [
+      "4",
+      "test"
+    ],
+    "color": "#FFA07A"
+  }
+}

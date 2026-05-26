@@ -1,0 +1,9 @@
+# No external dependencies required
+# This project uses only Python standard library modules:
+# - json (data storage)
+# - re (validation)
+# - datetime (birthday calculations)
+# - pathlib (file operations)
+# - uuid (note ID generation)
+
+# Python version: 3.7+
