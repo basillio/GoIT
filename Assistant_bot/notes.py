@@ -8,11 +8,12 @@ from uuid import uuid4
 
 
 class Note:
-    def __init__(self, text, tags=None, note_id=None, created_at=None):
+    def __init__(self, text, tags=None, note_id=None, created_at=None, color=None):
         self.id = note_id or str(uuid4())
         self.text = text
         self.tags = tags or []
         self.created_at = created_at or datetime.now().isoformat()
+        self.color = color
 
     def to_dict(self):
         return {
@@ -20,6 +21,7 @@ class Note:
             "text": self.text,
             "tags": self.tags,
             "created_at": self.created_at,
+            "color": self.color,
         }
 
     @staticmethod
@@ -29,6 +31,7 @@ class Note:
             tags=data.get("tags", []),
             note_id=data.get("id"),
             created_at=data.get("created_at"),
+            color=data.get("color"),
         )
 
     def __str__(self):
@@ -42,6 +45,7 @@ class NoteBook:
         self.data_dir.mkdir(exist_ok=True)
         self.notes_file = self.data_dir / "notes.json"
         self.notes = self._load_notes()
+        self._tag_cache = None
 
     def _load_notes(self):
         if self.notes_file.exists():
@@ -54,6 +58,7 @@ class NoteBook:
         with open(self.notes_file, "w", encoding="utf-8") as f:
             data = {note_id: note.to_dict() for note_id, note in self.notes.items()}
             json.dump(data, f, ensure_ascii=False, indent=2)
+        self._tag_cache = None  # Invalidate cache when notes are saved
 
     def add_note(self, text, tags=None):
         if not text or not text.strip():
@@ -71,7 +76,7 @@ class NoteBook:
         self._save_notes()
         return f"✅ Нотатка видалена"
 
-    def edit_note(self, note_id, text=None, tags=None):
+    def edit_note(self, note_id, text=None, tags=None, color=None):
         if note_id not in self.notes:
             raise ValueError(f"❌ Нотатка з ID '{note_id}' не знайдена")
 
@@ -82,6 +87,8 @@ class NoteBook:
             note.text = text
         if tags is not None:
             note.tags = tags
+        if color is not None:
+            note.color = color
 
         self._save_notes()
         return f"✅ Нотатка оновлена"
@@ -121,3 +128,23 @@ class NoteBook:
 
     def list_all_notes(self):
         return list(self.notes.values())
+
+    def get_all_tags(self):
+        """Get all unique tags from all notes (cached)"""
+        if self._tag_cache is not None:
+            return self._tag_cache
+
+        all_tags = set()
+        for note in self.notes.values():
+            all_tags.update(note.tags)
+        self._tag_cache = sorted(list(all_tags))
+        return self._tag_cache
+
+    def get_tags_matching(self, prefix):
+        """Get tags that start with the given prefix (case-insensitive)"""
+        if not prefix or len(prefix) < 3:
+            return []
+        prefix_lower = prefix.lower()
+        all_tags = self.get_all_tags()
+        matching = [tag for tag in all_tags if tag.lower().startswith(prefix_lower)]
+        return matching[:10]  # Return max 10 matches

@@ -26,12 +26,14 @@ def test_contacts():
     contact_book = ContactBook(str(test_dir))
 
     # Test 1: Add valid contact
-    print("\n✓ Test 1: Adding valid contact")
+    print("\n✓ Test 1: Adding valid contact with all fields")
     try:
         result = contact_book.add_contact(
             "John Doe",
             phone="+1-234-567-8900",
+            phone2="+1-234-567-8901",
             email="john@example.com",
+            email2="john.doe@example.com",
             address="123 Main St",
             birthday="15.03.1990"
         )
@@ -49,8 +51,17 @@ def test_contacts():
     except ValueError as e:
         print(f"  {e}")
 
-    # Test 3: Invalid email validation
-    print("\n✓ Test 3: Email validation (should reject invalid)")
+    # Test 3: Invalid phone2 validation
+    print("\n✓ Test 3: Phone2 validation (should reject invalid)")
+    try:
+        contact_book.add_contact("Jane Doe", phone="+1-234-567-8900", phone2="456")
+        print("  ✗ Failed: Should have rejected invalid phone2")
+        return False
+    except ValueError as e:
+        print(f"  {e}")
+
+    # Test 4: Invalid email validation
+    print("\n✓ Test 4: Email validation (should reject invalid)")
     try:
         contact_book.add_contact("Bob Smith", email="invalid-email")
         print("  ✗ Failed: Should have rejected invalid email")
@@ -58,31 +69,53 @@ def test_contacts():
     except ValueError as e:
         print(f"  {e}")
 
-    # Test 4: Search contact
-    print("\n✓ Test 4: Searching contact")
-    results = contact_book.search_contact("John")
+    # Test 5: Invalid email2 validation
+    print("\n✓ Test 5: Email2 validation (should reject invalid)")
+    try:
+        contact_book.add_contact("Bob Smith", email="bob@example.com", email2="invalid-email")
+        print("  ✗ Failed: Should have rejected invalid email2")
+        return False
+    except ValueError as e:
+        print(f"  {e}")
+
+    # Test 6: Search contact by phone2
+    print("\n✓ Test 6: Searching contact by phone2")
+    results = contact_book.search_contact("+1-234-567-8901")
     if results and results[0].name == "John Doe":
-        print(f"  Found: {results[0].name}")
+        print(f"  Found: {results[0].name} by phone2")
     else:
-        print("  ✗ Failed: Contact not found")
+        print("  ✗ Failed: Contact not found by phone2")
         return False
 
-    # Test 5: Edit contact
-    print("\n✓ Test 5: Editing contact")
+    # Test 7: Search contact by email2
+    print("\n✓ Test 7: Searching contact by email2")
+    results = contact_book.search_contact("john.doe@example.com")
+    if results and results[0].name == "John Doe":
+        print(f"  Found: {results[0].name} by email2")
+    else:
+        print("  ✗ Failed: Contact not found by email2")
+        return False
+
+    # Test 8: Edit contact phone2 and email2
+    print("\n✓ Test 8: Editing contact phone2 and email2")
     try:
-        result = contact_book.edit_contact("John Doe", phone="+1-999-999-9999")
+        result = contact_book.edit_contact(
+            "John Doe",
+            phone2="+1-999-999-9999",
+            email2="newemail@example.com"
+        )
         print(f"  {result}")
     except Exception as e:
         print(f"  ✗ Failed: {e}")
         return False
 
-    # Test 6: List all contacts
-    print("\n✓ Test 6: Listing all contacts")
+    # Test 9: List all contacts
+    print("\n✓ Test 9: Listing all contacts")
     contacts = contact_book.list_all_contacts()
     print(f"  Total contacts: {len(contacts)}")
 
-    # Test 7: Birthday in N days
-    print("\n✓ Test 7: Finding birthdays in N days")
+    # Test 10: Birthday in N days
+    print("\n✓ Test 10: Finding birthdays in N days")
     try:
         # Add contact with birthday tomorrow
         tomorrow = (datetime.now() + timedelta(days=1)).strftime("%d.%m.%Y")
@@ -93,8 +126,8 @@ def test_contacts():
         print(f"  ✗ Failed: {e}")
         return False
 
-    # Test 8: Delete contact
-    print("\n✓ Test 8: Deleting contact")
+    # Test 11: Delete contact
+    print("\n✓ Test 11: Deleting contact")
     try:
         result = contact_book.delete_contact("Bob Smith")
         print(f"  {result}")

@@ -1,0 +1,30 @@
+{
+  "9388133c-28e9-4ad2-9a4e-9ba0fafeb2c3": {
+    "id": "9388133c-28e9-4ad2-9a4e-9ba0fafeb2c3",
+    "text": "some new item 1",
+    "tags": [
+      "item"
+    ],
+    "created_at": "2026-05-26T10:59:36.676063",
+    "color": "#FFA07A"
+  },
+  "90f24fc8-7cf3-480b-acbe-cb56d1b5bd5d": {
+    "id": "90f24fc8-7cf3-480b-acbe-cb56d1b5bd5d",
+    "text": "second item and some more extended note",
+    "tags": [
+      "item",
+      "extended"
+    ],
+    "created_at": "2026-05-26T11:00:34.791033",
+    "color": "#A8E6CF"
+  },
+  "3c8caf83-0a6a-4753-b1ff-9ca3ff70786a": {
+    "id": "3c8caf83-0a6a-4753-b1ff-9ca3ff70786a",
+    "text": "short one",
+    "tags": [
+      "one"
+    ],
+    "created_at": "2026-05-26T13:49:50.885636",
+    "color": null
+  }
+}

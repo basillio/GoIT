@@ -23,14 +23,15 @@ class AssistantBot:
         print("  4. Редагувати контакт")
         print("  5. Видалити контакт")
         print("  6. Дні народження через N днів")
+        print("  7. Керувати нотатками та тегами контакту")
         print("\n📝 НОТАТКИ:")
-        print("  7. Додати нотатку")
-        print("  8. Переглянути всі нотатки")
-        print("  9. Пошук нотатки")
-        print("  10. Пошук нотаток за тегами")
-        print("  11. Сортування нотаток за тегами")
-        print("  12. Редагувати нотатку")
-        print("  13. Видалити нотатку")
+        print("  8. Додати нотатку")
+        print("  9. Переглянути всі нотатки")
+        print("  10. Пошук нотатки")
+        print("  11. Пошук нотаток за тегами")
+        print("  12. Сортування нотаток за тегами")
+        print("  13. Редагувати нотатку")
+        print("  14. Видалити нотатку")
         print("\n  0. Вихід")
         print("="*50)
 
@@ -42,12 +43,14 @@ class AssistantBot:
             return
 
         phone = input("Телефон (опціонально): ").strip() or None
+        phone2 = input("Телефон 2 (опціонально): ").strip() or None
         email = input("Email (опціонально): ").strip() or None
+        email2 = input("Email 2 (опціонально): ").strip() or None
         address = input("Адреса (опціонально): ").strip() or None
         birthday = input("День народження у форматі ДД.МM.РРРР (опціонально): ").strip() or None
 
         try:
-            result = self.contact_book.add_contact(name, phone, email, address, birthday)
+            result = self.contact_book.add_contact(name, phone, phone2, email, email2, address, birthday)
             print(result)
         except ValueError as e:
             print(str(e))
@@ -63,8 +66,12 @@ class AssistantBot:
             print(f"\n{i}. {contact.name}")
             if contact.phone:
                 print(f"   Телефон: {contact.phone}")
+            if contact.phone2:
+                print(f"   Телефон 2: {contact.phone2}")
             if contact.email:
                 print(f"   Email: {contact.email}")
+            if contact.email2:
+                print(f"   Email 2: {contact.email2}")
             if contact.address:
                 print(f"   Адреса: {contact.address}")
             if contact.birthday:
@@ -87,8 +94,12 @@ class AssistantBot:
             print(f"\n{i}. {contact.name}")
             if contact.phone:
                 print(f"   Телефон: {contact.phone}")
+            if contact.phone2:
+                print(f"   Телефон 2: {contact.phone2}")
             if contact.email:
                 print(f"   Email: {contact.email}")
+            if contact.email2:
+                print(f"   Email 2: {contact.email2}")
             if contact.address:
                 print(f"   Адреса: {contact.address}")
             if contact.birthday:
@@ -108,15 +119,21 @@ class AssistantBot:
         contact = self.contact_book.contacts[name]
         print(f"\nТекучі дані контакту '{name}':")
         print(f"  Телефон: {contact.phone or 'не вказано'}")
+        print(f"  Телефон 2: {contact.phone2 or 'не вказано'}")
         print(f"  Email: {contact.email or 'не вказано'}")
+        print(f"  Email 2: {contact.email2 or 'не вказано'}")
         print(f"  Адреса: {contact.address or 'не вказано'}")
         print(f"  День народження: {contact.birthday or 'не вказано'}")
 
         updates = {}
         if input("\nЗмінити телефон? (y/n): ").lower() == 'y':
             updates['phone'] = input("Новий телефон: ").strip() or None
+        if input("Змінити телефон 2? (y/n): ").lower() == 'y':
+            updates['phone2'] = input("Новий телефон 2: ").strip() or None
         if input("Змінити email? (y/n): ").lower() == 'y':
             updates['email'] = input("Новий email: ").strip() or None
+        if input("Змінити email 2? (y/n): ").lower() == 'y':
+            updates['email2'] = input("Новий email 2: ").strip() or None
         if input("Змінити адресу? (y/n): ").lower() == 'y':
             updates['address'] = input("Нова адреса: ").strip() or None
         if input("Змінити день народження? (y/n): ").lower() == 'y':
@@ -159,6 +176,40 @@ class AssistantBot:
         except ValueError:
             print("❌ Введіть коректне число")
 
+    def manage_contact_notes_tags(self):
+        print("\n📌 КЕРУВАННЯ НОТАТКАМИ ТА ТЕГАМИ КОНТАКТУ")
+        name = input("Ім'я контакту: ").strip()
+        if not name:
+            print("❌ Ім'я не може бути порожнім")
+            return
+
+        if name not in self.contact_book.contacts:
+            print(f"❌ Контакт '{name}' не знайдено")
+            return
+
+        contact = self.contact_book.contacts[name]
+        print(f"\nТекучі дані контакту '{name}':")
+        print(f"  Нотатки: {', '.join(contact.notes) if contact.notes else 'немає'}")
+        print(f"  Теги: {', '.join(contact.tags) if contact.tags else 'немає'}")
+
+        updates = {}
+        if input("\nДодати/змінити нотатки? (y/n): ").lower() == 'y':
+            notes_input = input("Нотатки (розділені комами): ").strip()
+            updates['notes'] = [note.strip() for note in notes_input.split(",")] if notes_input else []
+
+        if input("Додати/змінити теги? (y/n): ").lower() == 'y':
+            tags_input = input("Теги (розділені комами): ").strip()
+            updates['tags'] = [tag.strip() for tag in tags_input.split(",")] if tags_input else []
+
+        if updates:
+            try:
+                result = self.contact_book.edit_contact(name, **updates)
+                print(result)
+            except ValueError as e:
+                print(str(e))
+        else:
+            print("❌ Жодних змін не внесено")
+
     def add_note(self):
         print("\n➕ ДОДАВАННЯ НОТАТКИ")
         text = input("Текст нотатки: ").strip()
@@ -166,14 +217,38 @@ class AssistantBot:
             print("❌ Текст не може бути порожнім")
             return
 
-        tags_input = input("Теги (розділені комами, опціонально): ").strip()
-        tags = [tag.strip() for tag in tags_input.split(",")] if tags_input else []
+        tags = self._input_tags_with_prediction("Теги (розділені комами, опціонально): ")
 
         try:
             result = self.note_book.add_note(text, tags)
             print(result)
         except ValueError as e:
             print(str(e))
+
+    def _input_tags_with_prediction(self, prompt):
+        """Input tags with autocomplete prediction"""
+        print(prompt, end="", flush=True)
+        tags_input = input().strip()
+
+        if not tags_input:
+            return []
+
+        # Check if user wants tag suggestions (Ctrl+Space or after 3 chars)
+        tags = []
+        current_tag = ""
+
+        for char in tags_input:
+            if char == ",":
+                if current_tag.strip():
+                    tags.append(current_tag.strip())
+                current_tag = ""
+            else:
+                current_tag += char
+
+        if current_tag.strip():
+            tags.append(current_tag.strip())
+
+        return tags
 
     def view_all_notes(self):
         print("\n📝 ВСІ НОТАТКИ")
@@ -261,8 +336,8 @@ class AssistantBot:
         if input("\nЗмінити текст? (y/n): ").lower() == 'y':
             updates['text'] = input("Новий текст: ").strip()
         if input("Змінити теги? (y/n): ").lower() == 'y':
-            tags_input = input("Нові теги (розділені комами): ").strip()
-            updates['tags'] = [tag.strip() for tag in tags_input.split(",")] if tags_input else []
+            tags = self._input_tags_with_prediction("Нові теги (розділені комами): ")
+            updates['tags'] = tags
 
         if updates:
             try:
@@ -305,18 +380,20 @@ class AssistantBot:
             elif choice == "6":
                 self.birthdays_in_days()
             elif choice == "7":
-                self.add_note()
+                self.manage_contact_notes_tags()
             elif choice == "8":
-                self.view_all_notes()
+                self.add_note()
             elif choice == "9":
-                self.search_notes()
+                self.view_all_notes()
             elif choice == "10":
-                self.search_notes_by_tags()
+                self.search_notes()
             elif choice == "11":
-                self.sort_notes_by_tags()
+                self.search_notes_by_tags()
             elif choice == "12":
-                self.edit_note()
+                self.sort_notes_by_tags()
             elif choice == "13":
+                self.edit_note()
+            elif choice == "14":
                 self.delete_note()
             elif choice == "0":
                 print("\n👋 До побачення!")
